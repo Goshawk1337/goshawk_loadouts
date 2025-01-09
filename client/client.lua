@@ -12,17 +12,27 @@ RegisterNUICallback('exit', function(data, cb)
     cb('ok')
 end)
 
-RegisterCommand('open', function(source, args, raw)
-    setNuiState(true)
-end, false)
+RegisterNUICallback('importLoadout', function(data, cb)
+    if not source then return end
+    if not data.code then return end
+    TriggerServerEvent("importLoadout", data.code)
+    cb('ok')
+end)
+
 
 local function openLoadout()
     setNuiState(true)
-    SendNUIMessage({
-        type = "initThings",
-        premadeLoads = Config.premadeLoads,
-    })
+    lib.callback('getSavedloadouts', false, function(loadouts)
+         SendNUIMessage({
+            type = "initThings",
+            premadeLoads = Config.premadeLoads,
+            savedLoads = loadouts,
+            items = Config.items,
+            weapons = Config.weapons
+        })
+    end)
 end
+
 RegisterNUICallback('blackList', function(cb)
     ESX.ShowNotification('Fekete listás szavakat tartalmaz a loadoutod neved!', 5000, "error")
     cb('ok')
@@ -32,10 +42,16 @@ RegisterNUICallback('createCustom', function(data, cb)
     if not data then return end
     if not data.weps then return end
     if not data.items then return end
+    if not data.name then return end
 
+    local name = data.name
     local wep = data.weps
     local items = data.items
     local price = data.price
+    local code = GenerateCode()
+
+    TriggerServerEvent("gs_loadout:createLoadout", name, wep, items, price, code)
+    cb('ok')
 end)
 RegisterNUICallback('buyLoad', function(data, cb)
     if not source then return end
@@ -43,13 +59,10 @@ RegisterNUICallback('buyLoad', function(data, cb)
         return
     end
 
-    loadout = Config.premadeLoads[data.loadID]
+    local loadout = Config.premadeLoads[data.loadID]
     TriggerServerEvent('gs_loadout:buyLoad', loadout.items, loadout.price)
     cb('ok')
 end)
-
-
-
 
 
 
@@ -147,41 +160,42 @@ CreateThread(InitPeds)
 local NumberCharset = {}
 local Charset = {}
 
-for i = 48,  57 do table.insert(NumberCharset, string.char(i)) end
+for i = 48, 57 do table.insert(NumberCharset, string.char(i)) end
 
-for i = 65,  90 do table.insert(Charset, string.char(i)) end
+for i = 65, 90 do table.insert(Charset, string.char(i)) end
 for i = 97, 122 do table.insert(Charset, string.char(i)) end
 
 function GenerateCode()
-	math.randomseed(GetGameTimer())
+    math.randomseed(GetGameTimer())
 
-	local generatedCode = string.upper(GetRandomLetter(Config.CodeLetters) .. (Config.CodeUseSpace and ' ' or '') .. GetRandomNumber(Config.CodeNumbers))
+    local generatedCode = string.upper(GetRandomLetter(Config.CodeLetters) ..
+    (Config.CodeUseSpace and ' ' or '') .. GetRandomNumber(Config.CodeNumbers))
 
-	local isTaken = IsCodeTaken(generatedCode)
-	if isTaken then 
-		return GenerateCode()
-	end
+    local isTaken = IsCodeTaken(generatedCode)
+    if isTaken then
+        return GenerateCode()
+    end
 
-	return generatedCode
+    return generatedCode
 end
 
 -- mixing async with sync tasks
 function IsCodeTaken(code)
-	local p = promise.new()
-	
-	ESX.TriggerServerCallback('isCodeTaken', function(isCodeTaken)
-		p:resolve(isCodeTaken)
-	end, code)
+    local p = promise.new()
 
-	return Citizen.Await(p)
+    ESX.TriggerServerCallback('isCodeTaken', function(isCodeTaken)
+        p:resolve(isCodeTaken)
+    end, code)
+
+    return Citizen.Await(p)
 end
 
 function GetRandomNumber(length)
-	Wait(0)
-	return length > 0 and GetRandomNumber(length - 1) .. NumberCharset[math.random(1, #NumberCharset)] or ''
+    Wait(0)
+    return length > 0 and GetRandomNumber(length - 1) .. NumberCharset[math.random(1, #NumberCharset)] or ''
 end
 
 function GetRandomLetter(length)
-	Wait(0)
-	return length > 0 and GetRandomLetter(length - 1) .. Charset[math.random(1, #Charset)] or ''
+    Wait(0)
+    return length > 0 and GetRandomLetter(length - 1) .. Charset[math.random(1, #Charset)] or ''
 end

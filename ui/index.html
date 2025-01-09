@@ -34,8 +34,29 @@
     -->
 
     <div id="app">
+        <div v-show="importLoad" class="h-screen flex items-center justify-center  select-none">
+            <div class="w-[20vw] h-[25vh] rounded-lg bg-[#222222] ">
+                <div class="float-right  mt-3 mr-3">
+                    <button @click="closeImport()"> <i
+                            class="fa-solid fa-x  cursor-pointer transition-all duration-200 hover:text-red-700 hover:scale-105"></i></button>
+                </div>
+                <h1 class="text-center mt-5 text-2xl">Loadout be importálása</h1>
+                <div class="flex items-center justify-center mt-10">
+                    <input type="text" placeholder="Code megadása" v-model="coadInp"
+                        class="input input-bordered w-full max-w-xs bg-[#1a1a1a]" />
+                </div>
+                <div class="flex items-center justify-center mt-3">
+                    <button @click="importLoadout(coadInp)"
+                        class="btn btn-ghost text-white btn-wide bg-[#22ba13] hover:bg-[#1c4e18] hover:scale-105 transition-all">Importálás</button>
+
+                </div>
+            </div>
+
+        </div>
         <div v-show="showUI" class="h-screen flex items-center justify-center  select-none">
             <div class="w-[60vw] h-[65vh] rounded-lg  bg-gradient-to-r from-[#222222] to-[#2b2b2b]  ">
+
+
                 <div class="navbar bg-gradient-to-r  from-[#303030a8] to-[#181818a8] rounded-tl-lg rounded-tr-lg">
                     <div class="navbar-start">
                         <div class="dropdown " @click="isDropdownOpen = !isDropdownOpen">
@@ -58,14 +79,14 @@
                     <div class="navbar-center">
                         <a v-if="selectedPage === 'mainmenu'" class="btn btn-ghost text-2xl">Moonrise Military Loadout
                             selecter</a>
-                        <!-- <a v-else-if="selectedPage === 'savedloads'" class="btn btn-ghost text-2xl">Moonrise Military
-                            Saved loadouts</a> -->
+                        <a v-else-if="selectedPage === 'savedloads'" class="btn btn-ghost text-2xl">Moonrise Military
+                            Saved loadouts</a>
                         <a v-else="selectedPage === 'creatormenu'" class="btn btn-ghost text-2xl">Moonrise Military
                             Loadout Creator</a>
 
                     </div>
                     <div class="navbar-end">
-                        <button class="btn btn-ghost">
+                        <button @click="importCodeOpen()" class="btn btn-ghost">
                             <a class="text-lg">Loadout importálása</a>
                         </button>
 
@@ -121,8 +142,8 @@
                     </div>
                 </div>
                 <div v-show="selectedPage === 'creatormenu'">
-                <!-- loadout creator for moonrise(fan1) -->
-                 <p class="text-xl text-center mt-3">Hozz létre loadoutokat magadnak, vagy osszd meg barátaiddal!</p>
+                    <!-- loadout creator for moonrise(fan1) -->
+                    <p class="text-xl text-center mt-3">Hozz létre loadoutokat magadnak, vagy osszd meg barátaiddal!</p>
 
                     <div class="float-right mt-5 mr-10 w-96 h-[28rem] bg-[#1a1a1a] rounded-lg shadow-lg text-white p-5">
                         <h1 class="text-center text-2xl font-bold mb-4">Loadout összetétel</h1>
@@ -191,7 +212,8 @@
                         <div class="mt-5">
                             <label class=" text-xl">Loadout neve</label>
                             <div class="mt-2">
-                                <input type="text" v-model="creatorData.loadName" placeholder="loadout neve"
+                                <input minlength="8" maxlength="20" type="text" v-model="creatorData.loadName"
+                                    placeholder="loadout neve"
                                     class="input input-sm input-bordered rounded h-[3rem] bg-[#1a1a1a] border-[#22ba13] max-w-xs" />
                             </div>
 
@@ -206,37 +228,100 @@
                         </div>
                     </div>
                     <div class="mt-3 ml-10">
-                        <button @click="createCustom()" class="btn btn-success text-w">Loadout létrehozása</button>
-                    </div> 
-                </div> 
+                        <button
+                            v-if="creatorData.currentWep > 0 && creatorData.currentItems > 0 && creatorData.loadName.length >= 4 "
+                            @click="createCustom()" class="btn btn-success text-w">Loadout létrehozása</button>
+                        <button
+                            v-else="creatorData.currentWep < 1 && creatorData.currentItems < 1 && creatorData.loadName < 4> "
+                            disabled class="btn btn-success text-w">Loadout létrehozása</button>
+
+                    </div>
+                </div>
+                <div v-show="selectedPage === 'savedloads'"  class="w-full h-full flex px-5 py-5 justify-center items-center">
+  
+                    <div class="prev-saved w-[3.8rem] h-[3.8rem] rounded-md border self-center flex cursor-pointer hover:scale-105 transition-all"
+                        onclick="savedSwiper.slidePrev()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6 self-center mx-auto rotate-180">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                    <main class="w-[85%] h-full flex justify-center items-center swiper-saved pb-[4.2rem] pl-2 pr-2">
+                        <section class="w-full h-full flex swiper-wrapper" id="saved-slider">
+                            <div v-for="(loadout, index) in savedLoads" :key="loadout.loadLabel"
+    
+                                class="swiper-slide w-[20vw] h-[50vh] rounded-md bg-[#464646] self-center p-5 flex flex-col">
+                            
+                                <header class="w-full h-1/6 mb-5">
+                                    <p class="text-2xl font-semibold text-center"><span class="text-[#22ba13]"> #{{index
+                                            + 1}}</span> -
+                                        {{loadout?.name}}</p>
+                                        <p class="text-lg font-semibold text-center">Import code: {{loadout?.code}}</p>
+                                    <hr class="mt-5 bg-[#22ba13] h-[2px] border-none">
+                                </header>
+                                <section class="flex-1 overflow-y-auto">
+                                    <ul v-for="(items, i) in loadout.items" :key="items.name"
+                                        class="text-xl flex flex-col gap-3">
+                                        <li>Fegyver: {{loadout.wep}}</li>
+
+                                        <span class="flex gap-3 mb-3 ml-2 font-medium ">
+                                            <li>{{items?.count}}x - {{items?.name}}</li>
+                                        </span>
+                                    </ul>
+                                </section>
+                                <footer class="w-full h-1/6 flex justify-center items-center gap-5">
+                                    <button @click="useLoadout('custom', loadout.code)"
+                                        class="sm:btn-xs md:btn-sm lg:btn-md text-2xl font-semibold border-none btn-wide hover:bg-[#1c4e18] bg-[#21ba13b2] text-white rounded-md p-3 cursor-pointer hover:scale-105 transition-all duration-500 flex justify-center items-center">
+                                        <span>USE LOADOUT - ${{loadout.price}}</span>
+                                    </button>
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="swiper-pagination-saved z-10"></div>
+                    </main>
+
+                    <div class="next-saved w-[3.8rem] h-[3.8rem] rounded-md border self-center flex cursor-pointer hover:scale-105 transition-all"
+                        onclick="savedSwiper.slideNext()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6 self-center mx-auto">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+
+                </div>
             </div>
 
 
 
-                <script type="text/javascript"
-                    src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.31/vue.global.prod.min.js"></script>
+            <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.31/vue.global.prod.min.js"></script>
 
-                <script src="script.js"></script>
+            <script src="script.js"></script>
 
-            </div>
-
-
+        </div>
 
 
-            <script>
-                tailwind.config = {
-                    theme: {
-                        extend: {
-                            fontFamily: {
-                                barlow: ["Barlow Condensed"],
-                            },
+
+
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            barlow: ["Barlow Condensed"],
                         },
                     },
-                };
-            </script>
+                },
+            };
+        </script>
 </body>
 
 <script>
+    setTimeout(() => {
+        
+    }, 100);
     const swiper = new Swiper('.swiper', {
         direction: 'horizontal',
         loop: false,
@@ -268,6 +353,40 @@
             prevEl: '.prev',
         },
     });
+    const savedSwiper = new Swiper('.swiper-saved', {
+    direction: 'horizontal',
+    loop: false,
+    slidesPerView: 2,
+    spaceBetween: 20,
+
+    breakpoints: {
+        640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+        },
+        768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+        },
+        1024: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+        },
+    },
+
+    pagination: {
+        el: '.swiper-pagination-saved',
+        clickable: true,
+    },
+
+    navigation: {
+        nextEl: '.next-saved',
+        prevEl: '.prev-saved',
+    },
+});
+</script>
+<script>
+       
 </script>
 
 <style>

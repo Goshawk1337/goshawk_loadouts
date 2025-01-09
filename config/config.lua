@@ -211,6 +211,46 @@ Config.premadeLoads = {
     }
 }
 
+Config.weapons = {
+    { name = "WEAPON_HEAVYPISTOL",      price = 2000,    currency = 'money' },
+    { name = "WEAPON_PISTOL",           price = 1500,    currency = 'money' },
+    { name = "WEAPON_DOUBLEACTION",     price = 2500,    currency = 'money' },
+    { name = "WEAPON_ASSAULTRIFLE",     price = 3000,    currency = 'money' },
+    { name = "WEAPON_SPECIALCARBINE",   price = 4000,    currency = 'money' },
+    { name = "WEAPON_MINISMG",          price = 2500,    currency = 'money' },
+    { name = "WEAPON_SMG",              price = 3000,    currency = 'money' },
+    { name = "WEAPON_COMPACTRIFLE",     price = 3500,    currency = 'money' },
+}
+Config.items = {
+    { name = "mrepack",                 price = 50,      currency = 'money' },
+    { name = "burger",                  price = 10,      currency = 'money' },
+    { name = "water",                   price = 20,      currency = 'money' },
+    { name = "cola",                    price = 20,      currency = 'money' },
+    { name = "medikit",                 price = 1000,    currency = 'money' },
+    { name = "afak",                    price = 200,     currency = 'money' },
+    { name = "parachute",               price = 500,     currency = 'money' },
+    { name = "radio",                   price = 500,     currency = 'money' },
+    { name = "armour",                  price = 1000,    currency = 'money' },
+    { name = "fixkartya",               price = 30000,   currency = 'money' },
+    { name = "diving",                  price = 2000,    currency = 'money' },
+    { name = "ammo-38",                 price = 5,       currency = 'money' },
+    { name = "ammo-45",                 price = 5,       currency = 'money' },
+    { name = "ammo-9",                  price = 5,       currency = 'money' },
+    { name = "ammo-rifle",              price = 5,       currency = 'money' },
+    { name = "ammo-rifle2",             price = 5,       currency = 'money' },
+    { name = "at_flashlight",           price = 200,     currency = 'money' },
+    { name = "at_suppressor_light",     price = 200,     currency = 'money' },
+    { name = "at_suppressor_heavy",     price = 200,     currency = 'money' },
+    { name = "at_grip",                 price = 200,     currency = 'money' },
+    { name = "at_clip_extended_pistol", price = 200,     currency = 'money' },
+    { name = "at_clip_extended_smg",    price = 200,     currency = 'money' },
+    { name = "at_clip_extended_rifle",  price = 200,     currency = 'money' },
+    { name = "at_clip_drum_smg",        price = 200,     currency = 'money' },
+    { name = "at_clip_drum_rifle",      price = 200,     currency = 'money' },
+    { name = "at_scope_small",          price = 100,     currency = 'money' },
+    { name = "at_scope_medium",         price = 120,     currency = 'money' },
+}
+
 
 Config.loadOutShops = {
     {coords = vector4(211.6285, 2796.4731, 44.6552, 106.6722)},  --safe1 

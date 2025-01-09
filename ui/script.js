@@ -2,10 +2,12 @@ const App = Vue.createApp({
     data() {
         return {
             blacklistedWords: [
-                "nigger", "nigga", "digga, kurva", "fasz", "fasszop", "fasszopó", "anyád", "nigg", "cigány"
+                "nigger", "nigga", "digga, kurva", "fasz", "fasszop", "fasszopó", "anyád", "nigg", "cigány", "n1gger", "cigany", "c1gány", "dan1", "szar", "fos", "kula", "geci"
             ],
             showUI: false,
-            selectedPage: "mainmenu",
+            importLoad: false,
+            coadInp: "",
+            selectedPage: "creatormenu",
             isDropdownOpen: true,
             select: "",
             count: 0,
@@ -19,31 +21,31 @@ const App = Vue.createApp({
                 maxWep: 1,
                 maxItems: 8,
                 currentPrice: 0,
-                weapons: [
-                    {
-                        name: "weapon_appistol",
-                        price: 1000
-                    },
-                    {
-                        name: "weapon_pistol",
-                        price: 2000
-                    }
-                ],
-                items: [
-                    {
-                        name: "ammo-9",
-                        price: 5
-                    },
-                    {
-                        name: "ammo-rifle",
-                        price: 5
-                    }
-                ]
+                weapons: [],
+                items: []
             },
             savedLoads: []
         };
     },
     methods: {
+        importCodeOpen() {
+            this.showUI = false
+            this.importLoad = true
+        },
+        closeImport() {
+            this.showUI = true
+            this.importLoad = false
+        },
+        importLoadout(code) {
+            if (!code || code === '' || code.length != 6) return;
+            fetch(`https://${GetParentResourceName()}/importLoadout`, {
+                method: "POST",
+                body: JSON.stringify({
+                    code: code
+                })
+            });
+            this.close()
+        },
         insert(type, item, amount) {
             if (!type) return;
             if (!item) return;
@@ -97,7 +99,7 @@ const App = Vue.createApp({
             fetch(`https://${GetParentResourceName()}/exit`);
             this.selectedPage = "mainmenu"
             isDropdownOpen = false
-
+            this.importLoad = false
         },
         buyLoad(loadID) {
             console.log(loadID)
@@ -114,20 +116,29 @@ const App = Vue.createApp({
             if (this.creatorData.currentItems < 1) return;
             if (!this.creatorData.loadName) return;
             for (let word of this.blacklistedWords) {
-                if (this.creatorData.loadName.includes(word)) {
+                if (this.creatorData.loadName.toLowerCase().includes(word)) {
                     fetch(`https://${GetParentResourceName()}/blackList`)
                     return;
                 }
             }
+
 
             fetch(`https://${GetParentResourceName()}/createCustom`, {
                 method: "POST",
                 body: JSON.stringify({
                     weps: this.creatorData.selectedWep,
                     items: this.creatorData.selectedItems,
+                    name: this.creatorData.loadName,
                     price: this.creatorData.currentPrice,
                 })
             });
+            
+            this.creatorData.loadName = ""
+            this.creatorData.selectedWep = ""
+            this.creatorData.selectedItems = []
+            this.creatorData.currentWep = 0
+            this.creatorData.currentItems = 0
+            this.creatorData.currentPrice = 0
         }
     },
 
@@ -139,8 +150,10 @@ const App = Vue.createApp({
                 this.showUI = event.data.enable
             } else if (event.data.type === "initThings") {
                 this.premadeLoads = event.data.premadeLoads
-                
-            }
+                this.savedLoads = event.data.savedLoads
+                this.creatorData.weapons = event.data.weapons
+                this.creatorData.items = event.data.items
+             } 
         });
 
         window.addEventListener('keydown', this.handleKeyDown);
