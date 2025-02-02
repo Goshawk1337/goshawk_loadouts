@@ -33,7 +33,7 @@
             - loadout torles
     -->
 
-    <div id="app">
+    <div id="app" class="text-white">
         <div v-show="importLoad" class="h-screen flex items-center justify-center  select-none">
             <div class="w-[20vw] h-[25vh] rounded-lg bg-[#222222] ">
                 <div class="float-right  mt-3 mr-3">
@@ -47,7 +47,7 @@
                 </div>
                 <div class="flex items-center justify-center mt-3">
                     <button @click="importLoadout(coadInp)"
-                        class="btn btn-ghost text-white btn-wide bg-[#22ba13] hover:bg-[#1c4e18] hover:scale-105 transition-all">Importálás</button>
+                        class="btn btn-ghost  text-white btn-wide bg-[#22ba13] hover:bg-[#1c4e18] hover:scale-105 transition-all">Importálás</button>
 
                 </div>
             </div>
@@ -57,10 +57,10 @@
             <div class="w-[60vw] h-[65vh] rounded-lg  bg-gradient-to-r from-[#222222] to-[#2b2b2b]  ">
 
 
-                <div class="navbar bg-gradient-to-r  from-[#303030a8] to-[#181818a8] rounded-tl-lg rounded-tr-lg">
+                <div class="navbar bg-gradient-to-r   from-[#303030a8] to-[#181818a8] rounded-tl-lg rounded-tr-lg">
                     <div class="navbar-start">
                         <div class="dropdown " @click="isDropdownOpen = !isDropdownOpen">
-                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle hover:bg-[#22ba13]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -68,25 +68,25 @@
                                 </svg>
                             </div>
                             <ul v-show="!isDropdownOpen" tabindex="0"
-                                class="menu menu-sm dropdown-content bg-[#303030] rounded-box z-50 mt-3 w-32 p-2 shadow ">
-                                <li><a @click="changePage('mainmenu')">Fő menü</a></li>
-                                <li><a @click="changePage('creatormenu')">Creator menü</a></li>
-                                <li><a @click="changePage('savedloads')">Mentett loadoutok</a></li>
+                                class="menu menu-sm dropdown-content  bg-[#303030] rounded-box z-50 mt-3 w-32 p-2 shadow ">
+                                <li class="hover:bg-[#22ba13] rounded-box"><a @click="changePage('mainmenu')">Fő menü</a></li>
+                                <li class="hover:bg-[#22ba13] rounded-box"><a @click="changePage('creatormenu')">Creator menü</a></li>
+                                <li class="hover:bg-[#22ba13] rounded-box"><a @click="changePage('savedloads')">Mentett loadoutok</a></li>
 
                             </ul>
                         </div>
                     </div>
                     <div class="navbar-center">
-                        <a v-if="selectedPage === 'mainmenu'" class="btn btn-ghost text-2xl">Moonrise Military Loadout
+                        <a v-if="selectedPage === 'mainmenu'" class="btn btn-ghost hover:bg-[#22ba13] text-2xl">Moonrise Military Loadout
                             selecter</a>
-                        <a v-else-if="selectedPage === 'savedloads'" class="btn btn-ghost text-2xl">Moonrise Military
+                        <a v-else-if="selectedPage === 'savedloads'" class="btn btn-ghost hover:bg-[#22ba13] text-2xl">Moonrise Military
                             Saved loadouts</a>
-                        <a v-else="selectedPage === 'creatormenu'" class="btn btn-ghost text-2xl">Moonrise Military
+                        <a v-else="selectedPage === 'creatormenu'" class="btn btn-ghost hover:bg-[#22ba13] text-2xl">Moonrise Military
                             Loadout Creator</a>
 
                     </div>
                     <div class="navbar-end">
-                        <button @click="importCodeOpen()" class="btn btn-ghost">
+                        <button @click="importCodeOpen()" class="hover:bg-[#22ba13] btn btn-ghost">
                             <a class="text-lg">Loadout importálása</a>
                         </button>
 
@@ -95,7 +95,7 @@
 
                 <div v-show="selectedPage === 'mainmenu'"
                     class="w-full h-full flex px-5 py-5 justify-center items-center">
-                    <div class="prev w-[3.8rem] h-[3.8rem] rounded-md border self-center flex cursor-pointer hover:scale-105 transition-all"
+                    <div class="prev w-[3.8rem] h-[3.8rem] rounded-md border  mb-[8rem] self-center flex cursor-pointer hover:scale-105 transition-all"
                         onclick="swiper.slidePrev()">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6 self-center mx-auto rotate-180">
@@ -103,10 +103,11 @@
                                 d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
                         </svg>
                     </div>
-                    <main class="w-[85%] h-full flex justify-center items-center swiper pb-[4.2rem] pl-2 pr-2">
+                    <main
+                        class="w-[85%] h-full flex justify-center items-center swiper-container swiper pb-[4.2rem] pl-2 pr-2">
                         <section class="w-full h-full flex swiper-wrapper" id="slider">
                             <div v-for="(list, index) in premadeLoads" :key="list.loadLabel"
-                                class="swiper-slide w-[20vw] h-[50vh] rounded-md bg-[#464646] self-center p-5 flex flex-col">
+                                class="swiper-slide w-[20vw] h-[50vh] rounded-md bg-[#1a1a1a] self-center p-5 flex flex-col">
                                 <header class="w-full h-1/6 mb-5">
                                     <p class="text-2xl font-semibold text-center"><span class="text-[#22ba13]"> #{{index
                                             + 1}}</span> - {{list?.label}}</p>
@@ -132,7 +133,7 @@
                         <div class="swiper-pagination z-10"></div>
                     </main>
 
-                    <div class="next w-[3.8rem] h-[3.8rem] rounded-md border self-center flex cursor-pointer hover:scale-105 transition-all"
+                    <div class="next w-[3.8rem] h-[3.8rem] rounded-md border self-center mb-[8rem] flex cursor-pointer hover:scale-105 transition-all"
                         onclick="swiper.slideNext()">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6 self-center mx-auto">
@@ -151,9 +152,9 @@
                             <hr class="bg-[#22ba13] h-[2px] border-none w-64">
                         </div>
                         <div class="text-xl mb-4">
-                            <p><b>Fegyver</b>: {{creatorData?.selectedWep}} <button
-                                    v-show="creatorData?.selectedWep != '' "
-                                    @click="deleteFrom('weapon', 0, creatorData.selectedWep)"><i
+                            <p><b>Fegyver</b>: {{creatorData?.selectedWep?.label}} <button
+                                    v-show="creatorData?.selectedWep.label != '' "
+                                    @click="deleteFrom('weapon', 0, creatorData.selectedWep.name)"><i
                                         class="fa-solid fa-trash ml-5 text-sm hover:cursor-pointer hover:text-red-600 transition-all duration-300"></i></button>
                             </p>
                         </div>
@@ -161,8 +162,8 @@
                             <p><b>Itemek</b>:</p>
                             <ul class="list-disc list-inside ml-5">
                                 <li v-for="(item, index) in creatorData.selectedItems" :key="index" class="mb-1">
-                                    {{item?.count}}x - {{item?.name}} <button
-                                        @click="deleteFrom('item', index, item.name, item.count)"><i
+                                    {{item?.count}}x - {{item?.label}} <button
+                                        @click="deleteFrom('item', index, item.name, item.count )"><i
                                             class="fa-solid fa-trash ml-5 text-sm hover:cursor-pointer hover:text-red-600 transition-all duration-300"></i></button>
                                 </li>
                             </ul>
@@ -181,7 +182,7 @@
                                 <option value="" disabled selected>Válassz fegyvert</option>
                                 <option v-for="(weapon, index) in creatorData.weapons" :key="index"
                                     :value="weapon?.name"> {{index + 1}}. &thinsp;
-                                    {{weapon?.name}} </option>
+                                    {{weapon?.label}} </option>
                             </select>
                             <button v-show="creatorData.currentWep < creatorData.maxWep" class="btn btn-success"
                                 @click="insert('weapon', select)">Hozzáadás</button>
@@ -200,7 +201,7 @@
                                 <option value="" disabled selected>Válassz ki itemet</option>
                                 <option v-for="(items, index) in creatorData.items" :key="index" :value="items.name">
                                     {{index + 1}}. &thinsp;
-                                    {{items?.name}} </option>
+                                    {{items?.label}} </option>
                             </select>
                             <label class=" ">Mennyiség</label>
                             <input v-model="count" v-show="creatorData.currentItems < creatorData.maxItems"
@@ -221,68 +222,78 @@
                     </div>
                     <div class="mt-8  ml-10">
                         <div class="  mb-5  text-2xl">
-                            <h1>Jelenlegi összeg: {{creatorData.currentPrice}}</h1>
+                            <h1>Jelenlegi összeg: {{creatorData?.currentPrice}}</h1>
                         </div>
                         <div class="   text-2xl">
-                            <h1>Jelenlegi Item mennyiség: {{creatorData.currentItems}}</h1>
+                            <h1>Jelenlegi Item mennyiség: {{creatorData?.currentItems}}</h1>
                         </div>
                     </div>
                     <div class="mt-3 ml-10">
                         <button
-                            v-if="creatorData.currentWep > 0 && creatorData.currentItems > 0 && creatorData.loadName.length >= 4 "
-                            @click="createCustom()" class="btn btn-success text-w">Loadout létrehozása</button>
-                        <button
-                            v-else="creatorData.currentWep < 1 && creatorData.currentItems < 1 && creatorData.loadName < 4> "
-                            disabled class="btn btn-success text-w">Loadout létrehozása</button>
+                        v-if="creatorData.currentWep > 0 && creatorData.currentItems > 0 && creatorData.loadName.length >= 4 "
+                        @click="createCustom()" class="btn btn-ghost bg-[#179624] hover:bg-[#179624] ">Loadout létrehozása</button>
+                    <button
+                        v-else="creatorData.currentWep < 1 && creatorData.currentItems < 1 && creatorData.loadName < 4> "
+                          class="btn btn-ghost bg-[#575757] hover:bg-[#179624]" aria-disabled="true">Loadout létrehozása</button>
+
 
                     </div>
                 </div>
-                <div v-show="selectedPage === 'savedloads'"  class="w-full h-full flex px-5 py-5 justify-center items-center">
-  
-                    <div class="prev-saved w-[3.8rem] h-[3.8rem] rounded-md border self-center flex cursor-pointer hover:scale-105 transition-all"
-                        onclick="savedSwiper.slidePrev()">
+
+
+                <div v-show="selectedPage === 'savedloads'"
+                    class="w-full h-full flex px-5 py-5 justify-center items-center">
+
+                    <div class="prev w-[3.8rem] h-[3.8rem] rounded-md border mb-[8rem] self-center flex cursor-pointer hover:scale-105 transition-all"
+                        onclick="swipers.slidePrev()">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6 self-center mx-auto rotate-180">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
                         </svg>
                     </div>
-                    <main class="w-[85%] h-full flex justify-center items-center swiper-saved pb-[4.2rem] pl-2 pr-2">
-                        <section class="w-full h-full flex swiper-wrapper" id="saved-slider">
-                            <div v-for="(loadout, index) in savedLoads" :key="loadout.loadLabel"
-    
-                                class="swiper-slide w-[20vw] h-[50vh] rounded-md bg-[#464646] self-center p-5 flex flex-col">
-                            
+                    <main
+                        class="w-[85%] h-full flex justify-center items-center swiper-container-1 swiper pb-[4.2rem] pl-2 pr-2">
+                        <section class="w-full h-full flex swiper-wrapper" id="slider">
+                            <div v-for="(list, index) in savedLoads" :key="list.name"
+                                class="swiper-slide w-[25vw] h-[50vh] rounded-md bg-[#1a1a1a] self-center p-5 flex flex-col">
                                 <header class="w-full h-1/6 mb-5">
                                     <p class="text-2xl font-semibold text-center"><span class="text-[#22ba13]"> #{{index
-                                            + 1}}</span> -
-                                        {{loadout?.name}}</p>
-                                        <p class="text-lg font-semibold text-center">Import code: {{loadout?.code}}</p>
+                                            + 1}}</span> - {{list?.name}}</p>
+                                    <p class="text-lg font-semibold text-center">import code: {{list?.code}}</p>
                                     <hr class="mt-5 bg-[#22ba13] h-[2px] border-none">
                                 </header>
                                 <section class="flex-1 overflow-y-auto">
-                                    <ul v-for="(items, i) in loadout.items" :key="items.name"
+                                    <p class="text-xl mb-2">Fegyver: {{list?.wep?.label}}</p>
+                                    <ul v-for="(items, i) in list.items" :key="items.name"
                                         class="text-xl flex flex-col gap-3">
-                                        <li>Fegyver: {{loadout.wep}}</li>
-
                                         <span class="flex gap-3 mb-3 ml-2 font-medium ">
-                                            <li>{{items?.count}}x - {{items?.name}}</li>
+                                            <li>{{items?.count}}x - {{items?.label}}</li>
                                         </span>
                                     </ul>
                                 </section>
-                                <footer class="w-full h-1/6 flex justify-center items-center gap-5">
-                                    <button @click="useLoadout('custom', loadout.code)"
-                                        class="sm:btn-xs md:btn-sm lg:btn-md text-2xl font-semibold border-none btn-wide hover:bg-[#1c4e18] bg-[#21ba13b2] text-white rounded-md p-3 cursor-pointer hover:scale-105 transition-all duration-500 flex justify-center items-center">
-                                        <span>USE LOADOUT - ${{loadout.price}}</span>
-                                    </button>
+                                <footer class="flex flex-col items-center gap-5 mt-10">
+                                    <div class="w-full h-auto flex flex-col items-center gap-5">
+                                        <!-- Vásárlás gomb -->
+                                        <button @click="buyCustom(list.wep.name, list.items, list.price)"
+                                            class="sm:btn-xs md:btn-sm lg:btn-md text-xl font-semibold border-none hover:bg-[#1c4e18] bg-[#21ba13b2] text-white rounded-md p-3 cursor-pointer hover:scale-105 transition-all duration-500 flex justify-center items-center">
+                                            <span>VÁSÁRLÁS - ${{list?.price}}</span>
+                                        </button>
+                                        
+                                        <!-- Törlés gomb -->
+                                        <button @click="deleteCustom(list.code)"
+                                            class="sm:btn-xs md:btn-sm lg:btn-md text-xl font-semibold border-none hover:bg-[#4e1818] bg-[#ba1313b2] text-white rounded-md p-3 cursor-pointer hover:scale-105 transition-all duration-500 flex justify-center items-center">
+                                            <span>TÖRLÉS A MENTETTBŐL</span>
+                                        </button>
+                                    </div>
                                 </footer>
                             </div>
                         </section>
-                        <div class="swiper-pagination-saved z-10"></div>
+                        <div class="swiper-pagination z-10"></div>
                     </main>
 
-                    <div class="next-saved w-[3.8rem] h-[3.8rem] rounded-md border self-center flex cursor-pointer hover:scale-105 transition-all"
-                        onclick="savedSwiper.slideNext()">
+                    <div class="next w-[3.8rem] h-[3.8rem] rounded-md border mb-[8rem] self-center flex cursor-pointer hover:scale-105 transition-all"
+                        onclick="swipers.slideNext()">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6 self-center mx-auto">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -290,8 +301,16 @@
                         </svg>
                     </div>
 
+
+
+
+
                 </div>
             </div>
+
+            <script>
+
+            </script>
 
 
 
@@ -318,14 +337,13 @@
         </script>
 </body>
 
+
 <script>
-    setTimeout(() => {
-        
-    }, 100);
-    const swiper = new Swiper('.swiper', {
+    const swiper = new Swiper('.swiper-container', {
+
         direction: 'horizontal',
         loop: false,
-        slidesPerView: 2,
+        slidesPerView: 3,
         spaceBetween: 20,
 
         breakpoints: {
@@ -353,40 +371,38 @@
             prevEl: '.prev',
         },
     });
-    const savedSwiper = new Swiper('.swiper-saved', {
-    direction: 'horizontal',
-    loop: false,
-    slidesPerView: 2,
-    spaceBetween: 20,
+    const swipers = new Swiper('.swiper-container-1', {
 
-    breakpoints: {
-        640: {
-            slidesPerView: 1,
-            spaceBetween: 20,
-        },
-        768: {
-            slidesPerView: 2,
-            spaceBetween: 30,
-        },
-        1024: {
-            slidesPerView: 3,
-            spaceBetween: 20,
-        },
-    },
+        direction: 'horizontal',
+        loop: false,
+        slidesPerView: 3,
+        spaceBetween: 20,
 
-    pagination: {
-        el: '.swiper-pagination-saved',
-        clickable: true,
-    },
+        breakpoints: {
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+            },
+        },
 
-    navigation: {
-        nextEl: '.next-saved',
-        prevEl: '.prev-saved',
-    },
-});
-</script>
-<script>
-       
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+
+        navigation: {
+            nextEl: '.next',
+            prevEl: '.prev',
+        },
+    });
 </script>
 
 <style>
